@@ -1,2 +1,1 @@
-# Chess-School-Project
-The code for the Chess School Project
+# Chess in Python for a School Project
