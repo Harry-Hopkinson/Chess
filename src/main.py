@@ -103,7 +103,7 @@ def deselect():
                     pass
     return convert_to_readeable(board)
 
-# Returns Legal Moves
+# Returns Legal Moves of all the Pieces apart from Pawns
 
 def highlight(board):
     highlighted = []
@@ -132,6 +132,72 @@ def check_team(moves, index):
 def select_moves(piece, index, moves):
     if check_team(moves, index):
         if piece.type == "p":
+            if piece.team == "b":
+                return highlight(pawn_moves_b(index))
+            else:
+                return highlight(pawn_moves_w(index))
+
+        if piece.type == "k":
+            return highlight(king_moves(index))
+        if piece.type == "r":
+            return highlight(rook_moves(index))
+        if piece.type == "b":
+            return highlight(bishop_moves(index))
+        if piece.type == "q":
+            return highlight(queen_moves(index))
+        if piece.type == "kn":
+            return highlight(knight_moves(index))
+
+################## Pawn Legal Moves ##################
+
+def pawn_moves_b(index):
+    if index[0] == 1:
+        if board[index[0] + 2][index[1]] == '  ' and board[index[0] + 1][index[1]] == '  ':
+            board[index[0] + 2][index[1]] = 'x '
+    bottom3 = [[index[0] + 1, index[1] + i] for i in range(-1, 2)]
+
+    for positions in bottom3:
+        if on_board(positions):
+            if bottom3.index(positions) % 2 == 0:
+                try:
+                    if board[positions[0]][positions[1]].team != 'b':
+                        board[positions[0]][positions[1]].killable = True
+                except:
+                    pass
+            else:
+                if board[positions[0]][positions[1]] == '  ':
+                    board[positions[0]][positions[1]] = 'x '
+    return board
+
+def pawn_moves_w(index):
+    if index[0] == 6:
+        if board[index[0] - 2][index[1]] == '  ' and board[index[0] - 1][index[1]] == '  ':
+            board[index[0] - 2][index[1]] = 'x '
+    top3 = [[index[0] - 1, index[1] + i] for i in range(-1, 2)]
+
+    for positions in top3:
+        if on_board(positions):
+            if top3.index(positions) % 2 == 0:
+                try:
+                    if board[positions[0]][positions[1]].team != 'w':
+                        board[positions[0]][positions[1]].killable = True
+                except:
+                    pass
+            else:
+                if board[positions[0]][positions[1]] == '  ':
+                    board[positions[0]][positions[1]] = 'x '
+    return board
+
+def king_moves(index):
+    for y in range(3):
+        for x in range(3):
+            if on_board((index[0] - 1 + y, index[1] - 1 + x)):
+                if board[index[0] - 1 + y][index[1] - 1 + x] == " ":
+                    board[index[0] - 1 + y][index[1] - 1 + x] = "x "
+                else:
+                    if board[index[0] - 1 + y][index[1] - 1 + x].team != board[index[0]][index[1]].team:
+                        board[index[0] - 1 + y][index[1] - 1 + x].canBeTaken = True
+    return board
             
         
 
