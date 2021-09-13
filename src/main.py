@@ -103,7 +103,7 @@ def deselect():
                     pass
     return convert_to_readeable(board)
 
-# Returns Legal Moves of all the Pieces apart from Pawns
+################## Show Legal Moves ##################
 
 def highlight(board):
     highlighted = []
@@ -148,7 +148,7 @@ def select_moves(piece, index, moves):
         if piece.type == "kn":
             return highlight(knight_moves(index))
 
-################## Pawn Legal Moves ##################
+################## Index Legal Moves ##################
 
 def pawn_moves_b(index):
     if index[0] == 1:
@@ -161,7 +161,7 @@ def pawn_moves_b(index):
             if bottom3.index(positions) % 2 == 0:
                 try:
                     if board[positions[0]][positions[1]].team != 'b':
-                        board[positions[0]][positions[1]].killable = True
+                        board[positions[0]][positions[1]].canBeTaken = True
                 except:
                     pass
             else:
@@ -180,13 +180,15 @@ def pawn_moves_w(index):
             if top3.index(positions) % 2 == 0:
                 try:
                     if board[positions[0]][positions[1]].team != 'w':
-                        board[positions[0]][positions[1]].killable = True
+                        board[positions[0]][positions[1]].canBeTaken = True
                 except:
                     pass
             else:
                 if board[positions[0]][positions[1]] == '  ':
                     board[positions[0]][positions[1]] = 'x '
     return board
+
+##### Legal King Moves #####
 
 def king_moves(index):
     for y in range(3):
@@ -198,19 +200,163 @@ def king_moves(index):
                     if board[index[0] - 1 + y][index[1] - 1 + x].team != board[index[0]][index[1]].team:
                         board[index[0] - 1 + y][index[1] - 1 + x].canBeTaken = True
     return board
+
+##### Legal Rook Moves #####
+
+def rook_moves(index):
+    cross = [[[index[0] + i, index[1]] for i in range(1, 8 - index[0])],
+             [[index[0] - i, index[1]] for i in range(1, index[0] + 1)],
+             [[index[0], index[1] + i] for i in range(1, 8 - index[1])],
+             [[index[0], index[1] - i] for i in range(1, index[1] + 1)]]
+
+    for direction in cross:
+        for positions in direction:
+            if on_board(positions):
+                if board[positions[0]][positions[1]] == '  ':
+                    board[positions[0]][positions[1]] = 'x '
+                else:
+                    if board[positions[0]][positions[1]].team != board[index[0]][index[1]].team:
+                        board[positions[0]][positions[1]].canBeTaken = True
+                    break
+    return board
+
+##### Legal Bishop Moves #####
+
+def bishop_moves(index):
+    diagonals = [[[index[0] + i, index[1] + i] for i in range(1, 8)],
+                 [[index[0] + i, index[1] - i] for i in range(1, 8)],
+                 [[index[0] - i, index[1] + i] for i in range(1, 8)],
+                 [[index[0] - i, index[1] - i] for i in range(1, 8)]]
+
+    for direction in diagonals:
+        for positions in direction:
+            if on_board(positions):
+                if board[positions[0]][positions[1]] == '  ':
+                    board[positions[0]][positions[1]] = 'x '
+                else:
+                    if board[positions[0]][positions[1]].team != board[index[0]][index[1]].team:
+                        board[positions[0]][positions[1]].canBeTaken = True
+                    break
+    return board
+
+##### Legal Queen Moves #####
+
+
+def queen_moves(index):
+    board = rook_moves(index)
+    board = bishop_moves(index)
+    return board
+
+##### Legal Knight Moves #####
+
+def knight_moves(index):
+    for i in range(-2, 3):
+        for j in range(-2, 3):
+            if i ** 2 + j ** 2 == 5:
+                if on_board((index[0] + i, index[1] + j)):
+                    if board[index[0] + i][index[1] + j] == '  ':
+                        board[index[0] + i][index[1] + j] = 'x '
+                    else:
+                        if board[index[0] + i][index[1] + j].team != board[index[0]][index[1]].team:
+                            board[index[0] + i][index[1] + j].canBeTaken = True
+    return board
+
+WIDTH = 800
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+
+pygame.display.set_caption("Chess")
+
+##### Hexadecimal Colours #####
+
+WHITE = (255, 255, 255)
+GREY = (128, 128, 128)
+YELLOW = (204, 204, 0)
+BLUE = (50, 255, 255)
+BLACK = (0, 0, 0)
+
+class Node:
+    def __init__(self, row, col, width):
+        self.row = row
+        self.col = col
+        self.x = int(row * width)
+        self.y = int(col * width)
+        self.colour = WHITE
+        self.occupied = None
+
+    def draw(self, WIN):
+        pygame.draw.rect(WIN, self.colour, (self.x, self.y, WIDTH / 8, WIDTH / 8))
+
+    def setup(self, WIN):
+        if starting_order[(self.row, self.col)]:
+            if starting_order[(self.row, self.col)] == None:
+                pass
+            else:
+                WIN.blit(starting_order[(self.row, self.col)], (self.x, self.y))
+
+def make_grid(rows, width):
+    grid = []
+    gap = WIDTH // rows
+    print(gap)
+    for i in range(rows):
+        grid.append([])
+        for j in range(rows):
+            node = Node(j, i, gap)
+            grid[i].append(node)
+            if (i+j) % 2 == 1:
+                grid[i][j].colour = GREY
+    return grid
+
+def draw_grid(win, rows, width):
+    gap = width // 8
+    for i in range(rows):
+        pygame.draw.line(win, BLACK, (0, i * gap), (width, i * gap))
+        for j in range(rows):
+            pygame.draw.line(win, BLACK, (j*gap, 0), (j * gap, width))
+
+
+def update_display(win, grid, rows, width):
+    for row in grid:
+        for spot in row:
+            spot.draw(win)
+            spot.setup(win)
+    draw_grid(win, rows, width)
+    pygame.display.update()
+
+def Find_Node(pos, WIDTH):
+    interval = WIDTH / 8
+    y, x = pos
+    rows = y // interval
+    columns = x // interval
+    return int(rows), int(columns)
+
+def display_potential_moves(positions, grid):
+    for i in positions:
+        x, y = i
+        grid[x][y].colour = BLUE
+
+
+def Do_Move(OriginalPos, FinalPosition, WIN):
+    starting_order[FinalPosition] = starting_order[OriginalPos]
+    starting_order[OriginalPos] = None
+
+def remove_highlight(grid):
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if (i+j) % 2 == 0:
+                grid[i][j].colour = WHITE
+            else:
+                grid[i][j].colour = GREY
+
+    return grid
+
+
+            
+    
             
         
 
 
 stockfish = Stockfish("H:\Computer Science\Year 9\Chess\src\stockfish_engine\stockfish_14_x64_avx2")
-
-
-
-
-
-
-
-
 
 
 
