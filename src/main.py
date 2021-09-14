@@ -357,6 +357,7 @@ def remove_highlight(grid):
 
 
 stockfish = Stockfish("H:\Computer Science\Year 9\Chess\src\stockfish_engine\stockfish_14_x64_avx2")
+# Do the path of your stockfish download .exe after unzipping the folder downloaded from -> https://stockfishchess.org/download/
 
 
 
