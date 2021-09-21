@@ -39,6 +39,7 @@ This distribution of Stockfish consists of the following files:
 This project needs the following commands to be installed. Use your command terminal for your native operating system.
 
 pip install pygame - Windows
+
 python3 -m pip install -U pygame --user - Mac Os
 
 
