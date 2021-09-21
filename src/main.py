@@ -349,6 +349,72 @@ def remove_highlight(grid):
 
     return grid
 
+def main(WIN, WIDTH):
+    moves = 0
+    selected = False
+    piece_to_move = []
+    grid = make_grid(8, WIDTH)
+    while True:
+        pygame.time.delay(50) # measures in ms
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit() # if you close the program pygame quits
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                y, x = Find_Node(pos, WIDTH)
+                if selected == False:
+                    try:
+                        possible = select_moves((board[x][y]), (x,y), moves)
+                        for positions in possible:
+                            row, col = positions
+                            grid[row][col].colour = BLUE
+                        piece_to_move = x,y
+                        selected = True
+                    except:
+                        piece_to_move = []
+                        print('Can\'t select')
+                   
+
+                else:
+                    try:
+                        if board[x][y].canBeTaken == True:
+                            row, col = piece_to_move
+                            board[x][y] = board[row][col]
+                            board[row][col] = '  '
+                            deselect()
+                            remove_highlight(grid)
+                            Do_Move((col, row), (y, x), WIN)
+                            moves += 1
+                            print(convert_to_readable(board))
+                        else:
+                            deselect()
+                            remove_highlight(grid)
+                            selected = False
+                            print("Deselected")
+                    except:
+                        if board[x][y] == 'x ':
+                            row, col = piece_to_move
+                            board[x][y] = board[row][col]
+                            board[row][col] = '  '
+                            deselect()
+                            remove_highlight(grid)
+                            Do_Move((col, row), (y, x), WIN)
+                            moves += 1
+                            print(convert_to_readable(board))
+                        else:
+                            deselect()
+                            remove_highlight(grid)
+                            selected = False
+                            print("Invalid move")
+                    selected = False
+
+            update_display(WIN, grid, 8, WIDTH)
+
+main(WIN, WIDTH)
+                        
+
 
             
     
@@ -357,7 +423,6 @@ def remove_highlight(grid):
 
 
 stockfish = Stockfish("H:\Computer Science\Year 9\Chess\src\stockfish_engine\stockfish_14_x64_avx2")
-# Do the path of your stockfish download .exe after unzipping the folder downloaded from -> https://stockfishchess.org/download/
 
 
 
