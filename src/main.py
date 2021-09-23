@@ -420,7 +420,7 @@ main(WIN, WIDTH)
     
             
         
-
+### Change the Path to the Stockfish Location executable on your computer. ###
 
 stockfish = Stockfish("H:\Computer Science\Year 9\Chess\src\stockfish_engine\stockfish_14_x64_avx2")
 
