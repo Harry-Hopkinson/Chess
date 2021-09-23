@@ -22,13 +22,13 @@ intrinsics available on most CPUs (sse2, avx2, neon, or similar).
 
 This distribution of Stockfish consists of the following files:
 
-  * [Readme.md](https://github.com/official-stockfish/Stockfish/blob/master/README.md), the file you are currently reading.
+  * [Readme.md](https://github.com/Harry-Hopkinson/Chess-in-Python/blob/main/README.md), the file you are currently reading.
 
-  * [Copying.txt](https://github.com/official-stockfish/Stockfish/blob/master/Copying.txt), a text file containing the GNU General Public License version 3.
+  * [Copying.txt](https://github.com/Harry-Hopkinson/Chess-in-Python/blob/main/docs/Stockfish%20Official%20Docs/Copying.txt), a text file containing the GNU General Public License version 3.
 
-  * [AUTHORS](https://github.com/official-stockfish/Stockfish/blob/master/AUTHORS), a text file with the list of authors for the project
+  * [AUTHORS](https://github.com/Harry-Hopkinson/Chess-in-Python/blob/main/docs/Stockfish%20Official%20Docs/AUTHORS.txt), a text file with the list of authors for the project
 
-  * [src](https://github.com/official-stockfish/Stockfish/tree/master/src), a subdirectory containing the full source code, including a Makefile
+  * [src](https://github.com/Harry-Hopkinson/Chess-in-Python/tree/main/src), a subdirectory containing the full source code, including a Makefile
     that can be used to compile Stockfish on Unix-like systems.
 
   * a file with the .nnue extension, storing the neural network for the NNUE
