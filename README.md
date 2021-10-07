@@ -20,7 +20,7 @@ intrinsics available on most CPUs (sse2, avx2, neon, or similar).
 
 ## Files
 
-This distribution of Stockfish consists of the following files:
+Run the main.py file found in src/main.py
 
   * [Readme.md](https://github.com/Harry-Hopkinson/Chess-in-Python/blob/main/README.md), the file you are currently reading.
 
