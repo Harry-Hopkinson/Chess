@@ -41,7 +41,9 @@ Run the main.py file found in src/main.py
 This project needs the following commands to be installed. Use your command terminal for your native operating system.
 
 pip install pygame - Windows
-
 python3 -m pip install -U pygame --user - Mac Os
+
+pip install stockfish
+pip install chess
 
 
