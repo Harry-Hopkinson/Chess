@@ -22,6 +22,8 @@ intrinsics available on most CPUs (sse2, avx2, neon, or similar).
 
 Run the main.py file found in src/main.py
 
+  * [main.py](https://github.com/Harry-Hopkinson/Chess/blob/main/src/main.py), the main program you run.
+
   * [Readme.md](https://github.com/Harry-Hopkinson/Chess-in-Python/blob/main/README.md), the file you are currently reading.
 
   * [Copying.txt](https://github.com/Harry-Hopkinson/Chess-in-Python/blob/main/docs/Stockfish%20Official%20Docs/Copying.txt), a text file containing the GNU General Public License version 3.
